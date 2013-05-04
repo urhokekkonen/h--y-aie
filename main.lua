@@ -352,15 +352,15 @@ feedback_parameters = {
 		feed_param = 1.,
 		orig_param = 0.1,
 	},
-	{ -- solarized stuff
-		dist_scale = 1.,
-		dist_add = .1,
-		sat_to_hue = .1,
-		val_to_hue = .1,
-		blowup = 0.002,
-		t_rotate = 10.,
-	},
-	{
+	{ -- In-place noise islands
+	 dist_scale = .000528,
+	 dist_add	= -0.000551,
+	 sat_to_hue = .00056,
+	 val_to_hue = .000056,
+	 blowup = .0008582,
+	 t_rotate = .000005206,
+  },
+  {
 		dist_scale = 0.1,
 		dist_add = .0,
 		sat_to_hue = .1,
@@ -391,11 +391,11 @@ feedback_parameters = {
 		blowup = 0.002,
 		t_rotate = 10.,
 	},
-	{ -- Passthrough                  -- 13
+	{ -- Passthrough                  -- 14
 		orig_param = 1.;
 		feed_param = 0.7;
 	},
-	{ -- Passthrough                  -- 13
+	{ -- Passthrough                  -- 15
 		orig_param = 0;
 		feed_param = 0.9;
 	},
