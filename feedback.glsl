@@ -71,8 +71,8 @@ vec4 effect(vec4 color, Image texture, vec2 texture_coords, vec2 pixel_coords) {
 
 	coords=(coords-.5)*.999+.5;
 	// Look up a new one
-	coords.x -= sin(a.x+t) * .001 * (a.z+.1);
-	coords.y += cos(a.x+t) * .001 * (a.z+.1);
+	coords.x -= sin(a.x+t) / r.x * (a.z+.1);
+	coords.y += cos(a.x+t) / r.y * (a.z+.1);
 	vec4 b = texture2D(feedback,coords);
 	// Also hsv
 	b = rgbToHsv(b);
