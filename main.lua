@@ -5,7 +5,7 @@ function love.load()
   wantedheight = 720
 	love.graphics.setMode(wantedwidth,wantedheight, false,0);
 	-- Hide the mouse cursor
---	love.mouse.setVisible(false);
+	love.mouse.setVisible(false);
 
 	f = love.graphics.newFont("EPIDEMIA.otf", 50)
 	titlefont = love.graphics.newFont("EPIDEMIA.otf", 350)
@@ -54,7 +54,7 @@ function love.load()
 		{
 			x = 600,
 			y = 400,
-			text = "Demoklubi Breakfast Club",
+			text = "Breakfast Klub",
 			font = f,
 			r=255, g=255, b=255,
 			lameshit = 1
@@ -70,7 +70,7 @@ function love.load()
 		{
 			x = 600,
 			y = 500,
-			text = "for the wedding democompo",
+			text = "a wedding demo",
 			font = f,
 			r=255, g=255, b=255,
 			lameshit = 3
@@ -161,7 +161,23 @@ function love.load()
 			text = "",
 			font = f,
 			r=192, g=192, b=192,
-			lameshit = 3
+			lameshit = 2
+		},
+		{
+			x = 600,
+			y = 600,
+			text = "",
+			font = f,
+			r=192, g=192, b=192,
+			lameshit = 1
+		},
+		{
+			x = 600,
+			y = 600,
+			text = "",
+			font = f,
+			r=192, g=192, b=192,
+			lameshit = 0
 		},
 
 
@@ -399,6 +415,14 @@ feedback_parameters = {
 		orig_param = 0;
 		feed_param = 0.9;
 	},
+	{ -- Passthrough                  -- 16
+		orig_param = 0;
+		feed_param = 0.;
+	},
+	{ -- Passthrough                  -- 17
+		orig_param = 0;
+		feed_param = 0.;
+	},
 
 }
 
@@ -473,7 +497,7 @@ function love.draw()
 	love.graphics.setPixelEffect(postproc_shader);
 	--love.graphics.setPixelEffect();
 	postproc_shader:send("t", time);
-	if(current_param < 3) or (current_param > 15) then
+	if(current_param < 3) or (current_param > 14) then
 		postproc = "default"
 	else
 		postproc = "pulsed"
