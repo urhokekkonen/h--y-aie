@@ -55,6 +55,30 @@ function lameshit1(time)
   love.graphics.drawq( bier, quad, 1, 1, 0 )
 end
 
+
+-- Set of feedback shader parameters
+feedback_parameters = {
+	colorful = {
+		dist_scale = 1.,
+		dist_add = .1,
+		sat_to_hue = .1,
+		val_to_hue = .1,
+		blowup = 0.002,
+		t_rotate = 10.,
+	}
+}
+
+-- Set of postproc shader parameters
+postproc_parameters = {
+	default = {
+		vignette_offset = 1.5*.5,
+    vignette_exponent = 6.*.5,
+		noise_amount = .7,
+		saturation_value = .3,
+		gamma = .5,
+	},
+}
+
 -- Main draw code
 function love.draw()
 	love.graphics.setPixelEffect()
@@ -75,13 +99,19 @@ function love.draw()
 	feedback_shader:send("feedback", feedback_canvas);
 	feedback_shader:send("t",time);
 	feedback_shader:send("r",resolution);
+	for name,value in pairs(feedback_parameters["colorful"]) do
+		feedback_shader:send(name, value)
+	end
 	love.graphics.draw(bgcanvas,0,0,0,1,1);
 	
 	-- Draw the result on the screen using the postproc shader
 	love.graphics.setCanvas();
---	love.graphics.setPixelEffect(postproc_shader);
+	--love.graphics.setPixelEffect(postproc_shader);
 	love.graphics.setPixelEffect();
---	postproc_shader:send("t", time);
+	--postproc_shader:send("t", time);
+	--for name,value in pairs(postproc_parameters["default"]) do
+	--	postproc_shader:send(name, value)
+	--end
 	love.graphics.draw(feedback_canvas,0,0,0,1,1);
 	
 	love.graphics.print("Hello World", 

@@ -3,6 +3,12 @@
 extern vec2 r;
 extern float t;
 
+extern float vignette_offset = 1.4*.5;
+extern float vignette_exponent = 6.*.5;
+extern float noise_amount = .7;
+extern float saturation_value = .3;
+extern float gamma = .5;
+
 int LFSR_Rand_Gen(in int n) {
    n = (n << 13) ^ n;
    return (n * (n*n*15731+789221) + 1376312589) & 0x7fffffff;
@@ -28,12 +34,6 @@ float vignette(vec2 sc, float offset, float exponent) {
 
    return 1.-pow(sc.x, exponent)-pow(sc.y,exponent);
 }
-
-float vignette_offset = 1.4*.5;
-float vignette_exponent = 6.*.5;
-float noise_amount = .6;
-float saturation_value = .3;
-float gamma = .5;
 
 vec4 effect(vec4 color, Image texture, vec2 texture_coords, vec2 pixel_coords) {
 	vec4 o0;

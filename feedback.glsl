@@ -1,8 +1,19 @@
-
+#if 0
+#define extern uniform
+#define Image Sampler2D
+#endif
 
 extern Image feedback;
 extern vec2 r;
 extern float t;
+
+// Tuneable parameters
+extern float dist_scale = 1.;
+extern float dist_add = .1;
+extern float sat_to_hue = .1;
+extern float val_to_hue = .1;
+extern float blowup = 0.002;
+extern float t_rotate = 10.;
 
 vec4 rgbToHsv( vec4 rgba ) {
 	vec4 return_value; 
@@ -60,24 +71,25 @@ float pn(vec3 p) {
 
 vec4 effect(vec4 color, Image texture, vec2 texture_coords, vec2 pixel_coords) {
 	vec2 coords = texture_coords;
-	//coords.x += .01*pn(vec3(10*coords,sin(t)));
-	//coords.y += .01*pn(vec3(cos(t),12*coords));
 	vec4 c= texture2D(texture,texture_coords);
+
 	// Look up value
 	vec4 a=texture2D(feedback,coords);
 
 	// transform to hsv
 	a = rgbToHsv(a);
 
-	coords=(coords-.5)*.999+.5;
+	// Blow up
+	coords=(coords-.5)*(1.-blowup)+.5;
+
 	// Look up a new one
-	coords.x -= sin(a.x+t) / r.x * (a.z+.1);
-	coords.y += cos(a.x+t) / r.y * (a.z+.1);
+	coords.x -= sin(a.x+t_rotate*t) / r.x * dist_scale * (a.z+dist_add);
+	coords.y += cos(a.x+t_rotate*t) / r.y * dist_scale * (a.z+dist_add);
 	vec4 b = texture2D(feedback,coords);
 	// Also hsv
 	b = rgbToHsv(b);
-	b.x += .1*a.y - .1*a.z; // Rotate color
-	b.a=1+.001*t;
+	b.x += sat_to_hue*a.y - val_to_hue*a.z; // Rotate color
+	b.a = 1;
 	b = hsvToRgb(b);
 
 	return c+b;
