@@ -29,7 +29,7 @@ function love.load()
 
 	-- Load audio
 	music = love.audio.newSource("music.ogg","stream");
-	music:play();
+	--music:play();
 
 	-- Set reference time
 	time_0 = love.timer.getMicroTime();
@@ -58,6 +58,18 @@ function lameshit1(time)
   quad:setViewport( bierx + bierx * ct*cs , biery + biery * cs*ctan , resolution[1],resolution[2]  )
   love.graphics.drawq( bier, quad, 1, 1, 0 )
 end
+
+function lameshit2(time)
+  local pct = time/33
+  local dw = pct * r8w
+  local dh = pct * r8h
+  local ox = (wantedwidth/2) - (dw/2)
+  local oy = (wantedheight/2) - (dh/2)
+  
+  quad:setViewport(0,0,r8w,r8h)
+  love.graphics.drawq(bier,quad,ox,oy,0, pct, pct)
+end
+
 
 
 -- Set of feedback shader parameters
@@ -225,6 +237,6 @@ function love.draw()
 			200+200*math.sin(love.timer.getMicroTime()-time_0), 
 			150+150*math.cos(love.timer.getMicroTime()-time_0))
   
---  lameshit1(time/100)
+  lameshit2(time)
   
 end
