@@ -107,6 +107,62 @@ function love.load()
 			r=0, g=0, b=0,
 			lameshit = 1
 		},
+		{
+			x = 400,
+			y = 350,
+			text = "",
+			font = f,
+			r=0, g=0, b=0,
+			lameshit = 3
+		},
+		{
+			x = 400,
+			y = 350,
+			text = "",
+			font = f,
+			r=0, g=0, b=0,
+			lameshit = 1
+		},
+		{
+			x = 600,
+			y = 550,
+			text = "Code: truck, urs",
+			font = f,
+			r=192, g=129, b=192,
+			lameshit = 1
+		},
+		{
+			x = 600,
+			y = 600,
+			text = "Music: urs",
+			font = f,
+			r=100, g=100, b=100,
+			lameshit = 1
+		},
+		{
+			x = 600,
+			y = 600,
+			text = "",
+			font = f,
+			r=0, g=0, b=0,
+			lameshit = 1
+		},
+		{
+			x = 600,
+			y = 600,
+			text = "All the best, satu and waffle",
+			font = f,
+			r=192, g=192, b=192,
+			lameshit = 2
+		},
+		{
+			x = 600,
+			y = 600,
+			text = "",
+			font = f,
+			r=192, g=192, b=192,
+			lameshit = 3
+		},
 
 
 	}
@@ -282,6 +338,28 @@ feedback_parameters = {
 		feed_param = 1.,
 		orig_param = 0.1,
 	},
+	{ -- Noisy contract
+		dist_scale = 0.001,
+		dist_add = .1,
+		sat_to_hue = .1,
+		val_to_hue = .2,
+		sat_to_sat = .0;
+		val_to_sat = .2;
+		sat_to_val = .00004;
+		hue_to_val = .0;
+		blowup = -0.002,
+		t_rotate = .0,
+		feed_param = 1.,
+		orig_param = 0.1,
+	},
+	{ -- solarized stuff
+		dist_scale = 1.,
+		dist_add = .1,
+		sat_to_hue = .1,
+		val_to_hue = .1,
+		blowup = 0.002,
+		t_rotate = 10.,
+	},
 	{
 		dist_scale = 0.1,
 		dist_add = .0,
@@ -305,9 +383,21 @@ feedback_parameters = {
 		blowup = .0008582,
 		t_rotate = .000005206,
 	},
-	{ -- Passthrough
+	{ -- solarized stuff
+		dist_scale = 1.,
+		dist_add = .1,
+		sat_to_hue = .1,
+		val_to_hue = .1,
+		blowup = 0.002,
+		t_rotate = 10.,
+	},
+	{ -- Passthrough                  -- 13
 		orig_param = 1.;
 		feed_param = 0.7;
+	},
+	{ -- Passthrough                  -- 13
+		orig_param = 0;
+		feed_param = 0.9;
 	},
 
 }
@@ -340,6 +430,7 @@ function love.draw()
 	local time = love.timer.getMicroTime()-time_0;
 
 	local current_param = math.floor(time / 6)+1;
+	print ("Current param = " .. current_param);
 	local textparam = font_table[current_param];
 
 	if current_param == 17 then
@@ -382,7 +473,7 @@ function love.draw()
 	love.graphics.setPixelEffect(postproc_shader);
 	--love.graphics.setPixelEffect();
 	postproc_shader:send("t", time);
-	if(current_param < 3) then
+	if(current_param < 3) or (current_param > 15) then
 		postproc = "default"
 	else
 		postproc = "pulsed"
@@ -403,6 +494,9 @@ function love.draw()
 --	love.graphics.print(strstr, 
 --			200+200*math.sin(love.timer.getMicroTime()-time_0), 
 --			150+150*math.cos(love.timer.getMicroTime()-time_0))
-  
+
+	if(textparam.lameshit == 2) then
+		lameshit2(time - 13*6)
+	end
   
 end
