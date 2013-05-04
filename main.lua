@@ -1,7 +1,9 @@
 -- Initialization
 function love.load()
 	-- Set graphics mode (change false to true for fullscreen)
-	love.graphics.setMode(1280,720, false,0);
+  wantedwidth = 1280
+  wantedheight = 720
+	love.graphics.setMode(wantedwidth,wantedheight, false,0);
 	-- Hide the mouse cursor
 	love.mouse.setVisible(false);
 
@@ -9,8 +11,13 @@ function love.load()
 	love.graphics.setFont(f)
   
   bier = love.graphics.newImage( 'Rochfort8.JPG' )
-  quad = love.graphics.newQuad( 2600, 1541 , 100, 100, 3648, 2736 )
-  
+  r8w = 3648
+  r8h = 2736
+  quad = love.graphics.newQuad( 2600, 1541 , 100, 100, r8w, r8h )  
+	resolution = {wantedwidth, wantedheight};
+  halftw = resolution[1]/2
+  halfth = resolution[2]/2
+ 
 	-- Initialize shaders
 	feedback_shader = love.graphics.newPixelEffect(love.filesystem.read("feedback.glsl"));
 
@@ -34,28 +41,35 @@ function love.keypressed(key, unicode)
 		love.event.quit()
 	end
 end
+-- Lame Shit! W007.
+
+function lameshit1(time)
+  local bierx = r8w/2
+  local biery = r8h/2
+  local ct = math.cos(time)
+  local cs = math.sin(time)
+  local ctan = math.tan(time)
+--  local xx = halftw + halftw * math.cos(time)
+--  local yy = halfth + halfth * math.sin(math.tan(time))
+  quad:setViewport( bierx + bierx * ct*cs , biery + biery * cs*ctan , resolution[1],resolution[2]  )
+  love.graphics.drawq( bier, quad, 1, 1, 0 )
+end
 
 -- Main draw code
 function love.draw()
 	love.graphics.setPixelEffect()
 	bgcanvas:clear();
   
-	time = love.timer.getMicroTime()-time_0;
-	resolution = {bgcanvas:getWidth(), bgcanvas:getHeight()};
+	local time = love.timer.getMicroTime()-time_0;
 	
 	-- Draw input stuff
 	love.graphics.setCanvas(bgcanvas);
-	love.graphics.setColor(255,127,0,255);
+	love.graphics.setColor(255,255,255,30);
 
-  local xx = 400+400*math.cos(love.timer.getMicroTime() - time_0)
-  local yy = 400+400*math.sin(math.tan(love.timer.getMicroTime() - time_0))
-
-  quad:setViewport( xx * 8 , yy * 8 , math.sin(xx)*200, math.sin(yy)*200 )
-
-  love.graphics.drawq( bier, quad, xx, yy, xx*yy )   
+  lameshit1(time)
 
 	-- Draw the feedback effect
-	love.graphics.setColor(255,255*yy,255*xx,255);
+	love.graphics.setColor(255,255,255,255);
 	love.graphics.setCanvas(feedback_canvas);
 	love.graphics.setPixelEffect(feedback_shader);
 	feedback_shader:send("feedback", feedback_canvas);
@@ -74,5 +88,6 @@ function love.draw()
 			200+200*math.sin(love.timer.getMicroTime()-time_0), 
 			150+150*math.cos(love.timer.getMicroTime()-time_0))
   
+--  lameshit1(time/100)
   
 end
