@@ -1,7 +1,9 @@
 -- Initialization
 function love.load()
-
-	-- Set graphics mode
+	-- Set graphics mode (change false to true for fullscreen)
+	love.graphics.setMode(1280,720, false,0);
+	-- Hide the mouse cursor
+	love.mouse.setVisible(false);
 
 	local f = love.graphics.newFont(30)
 	love.graphics.setFont(f)
