@@ -82,20 +82,51 @@ function lameshit3(time,increment)
   local st = r8w2 + math.sin(math.sin(time)) * (r8w2-128)
   local ct = r8h2 + (math.cos(time)*math.sin(time)) * (r8h2-128)
   
-  quad:setViewport(st,ct,128,128)
-  love.graphics.drawq(bier,quad,ls3x,ls3y)
   if increment then
     ls3x = ls3x + 128
-    if ls3x > 11*128 then
+    if ls3x > 128*11 then
       ls3x = 1
-      ls3y = ls3y+128
-      if ls3y > 6*128 then
+      ls3y = ls3y + 128
+      if ls3y > 128*7 then
         ls3x = 1
-        ls3y =1
+        ls3y = 1
       end
     end
   end
+  
+  quad:setViewport(st,ct,128,128)
+  love.graphics.drawq(bier,quad,ls3x,ls3y)
 end
+
+function lameshit4(time)
+  local st = 256 + math.cosh(math.sin(time)) * (r8w2-128)
+  local ct = r8h2 + math.cosh(time) * (r8h2-128)
+  local r128 = math.random(6,128)
+  quad:setViewport(st,ct,wantedwidth,r128)
+  love.graphics.drawq(bier,quad,1,
+    halfth + math.cos(math.sinh(time)*halfth)*halfth)
+end
+
+function lameshit5(time)
+  local ct = 256 + math.cosh(math.sin(time)) * (r8w2-128)
+  local st = r8w2 + math.sin(time) * (r8w2-128)
+  local r128 = math.random(32,64)
+  quad:setViewport(st,ct,wantedwidth,r128)
+  love.graphics.drawq(bier,quad,1,
+    halfth + math.cos(math.sinh(time)*halfth)*halfth)
+  r128 = math.random(32,64)
+  love.graphics.drawq(bier,quad,1,
+    halfth + math.sin(math.cos(time)*halfth)*halfth)
+  r128 = math.random(32,64)
+  ct = 256 + math.cos(math.cos(time)) * (r8w2-128)
+  love.graphics.drawq(bier,quad,1,
+    halfth + math.sin(math.tan(time)*halfth)*halfth)
+  r128 = math.random(32,64)
+  love.graphics.drawq(bier,quad,1,
+    halfth + math.tan(math.tan(time)*halfth)*halfth)
+
+end
+
 
 -- Set of feedback shader parameters
 feedback_parameters = {
@@ -258,11 +289,8 @@ function love.draw()
   love.graphics.draw(feedback_canvas,0,0,0,1,1);
 	
   local strstr = love.timer.getFPS() .. " - " .. time
-  
-	--love.graphics.print(strstr, 
-	--		200+200*math.sin(love.timer.getMicroTime()-time_0), 
-	--		150+150*math.cos(love.timer.getMicroTime()-time_0))
-  
+      
   lameshit3(time,true)
-  
+  lameshit4(time)
+  lameshit5(time)
 end
