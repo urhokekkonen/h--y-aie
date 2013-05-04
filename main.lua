@@ -14,7 +14,12 @@ function love.load()
   
   bier = love.graphics.newImage( 'Rochfort8.JPG' )
   r8w = 3648
+  r8w2 = r8w/2
   r8h = 2736
+  r8h2 = r8h/2
+  
+  inttime = 0
+  
   quad = love.graphics.newQuad( 2600, 1541 , 100, 100, r8w, r8h )  
 	resolution = {wantedwidth, wantedheight};
   halftw = resolution[1]/2
@@ -138,7 +143,27 @@ function lameshit2(time)
   love.graphics.drawq(bier,quad,ox,oy,0, pct, pct)
 end
 
+ls3x = 1
+ls3y = 1
 
+function lameshit3(time,increment)
+  local st = r8w2 + math.sin(math.sin(time)) * (r8w2-128)
+  local ct = r8h2 + (math.cos(time)*math.sin(time)) * (r8h2-128)
+  
+  quad:setViewport(st,ct,128,128)
+  love.graphics.drawq(bier,quad,ls3x,ls3y)
+  if increment then
+    ls3x = ls3x + 128
+    if ls3x > 11*128 then
+      ls3x = 1
+      ls3y = ls3y+128
+      if ls3y > 6*128 then
+        ls3x = 1
+        ls3y =1
+      end
+    end
+  end
+end
 
 -- Set of feedback shader parameters
 feedback_parameters = {
@@ -356,11 +381,10 @@ function love.draw()
   local strstr = love.timer.getFPS() .. " - " .. time
   
 
-	love.graphics.setFont(f);
-	love.graphics.print(strstr, 
-			200+200*math.sin(love.timer.getMicroTime()-time_0), 
-			150+150*math.cos(love.timer.getMicroTime()-time_0))
+--	love.graphics.setFont(f);
+--	love.graphics.print(strstr, 
+--			200+200*math.sin(love.timer.getMicroTime()-time_0), 
+--			150+150*math.cos(love.timer.getMicroTime()-time_0))
   
-  lameshit2(time)
   
 end
