@@ -49,7 +49,7 @@ function love.load()
 			text = "",
 			font = f,
 			r=255, g=255, b=255,
-			lameshit = 1
+			lameshit = 5
 		},
 		{
 			x = 600,
@@ -70,18 +70,18 @@ function love.load()
 		{
 			x = 600,
 			y = 500,
-			text = "a wedding demo",
+			text = "the winning demo",
 			font = f,
 			r=255, g=255, b=255,
-			lameshit = 3
+			lameshit = 6
 		},
 		{
 			x = 600,
-			y = 550,
-			text = "",
+			y = 500,
+			text = "the wedding demo",
 			font = f,
-			r=0, g=0, b=0,
-			lameshit = 1
+			r=255, g=255, b=255,
+			lameshit = 8
 		},
 		{
 			x = 400,
@@ -99,44 +99,44 @@ function love.load()
 			r=127, g=127, b=127,
 			lameshit = 1
 		},
-		{
+		{   -- 8
 			x = 400,
 			y = 350,
 			text = "",
 			font = f,
 			r=0, g=0, b=0,
-			lameshit = 1
+			lameshit = 9
 		},
-		{
+		{  --- 9
 			x = 400,
 			y = 350,
 			text = "",
 			font = f,
 			r=0, g=0, b=0,
-			lameshit = 3
+			lameshit = 10
 		},
-		{
+		{ -- 10
 			x = 400,
 			y = 350,
 			text = "",
 			font = f,
 			r=0, g=0, b=0,
-			lameshit = 1
+			lameshit = 11
 		},
-		{
+		{ -- 11
 			x = 600,
 			y = 550,
-			text = "Code: truck, urs",
+			text = "Code: Alison, Captain Knäckebröd",
 			font = f,
-			r=192, g=129, b=192,
-			lameshit = 1
+			r=20, g=20, b=20,
+			lameshit = 8
 		},
-		{
+		{ -- 12
 			x = 600,
 			y = 600,
-			text = "Music: urs",
+			text = "Music: Captain Knäckebröd",
 			font = f,
-			r=100, g=100, b=100,
+			r=20, g=20, b=20,
 			lameshit = 1
 		},
 		{
@@ -145,7 +145,7 @@ function love.load()
 			text = "",
 			font = f,
 			r=0, g=0, b=0,
-			lameshit = 1
+			lameshit = 12
 		},
 		{
 			x = 600,
@@ -192,9 +192,7 @@ function love.keypressed(key, unicode)
 	if key == 'escape' then
 		love.event.quit()
 	elseif key == ' ' then
-		current_param = current_param +1;
-	elseif key == 'b' then
-		current_param = current_param -1;
+		love.audio.pause();
 	end
 end
 -- Lame Shit! W007.
@@ -225,7 +223,7 @@ end
 ls3x = 1
 ls3y = 1
 
-function lameshit3(time,increment)
+function lameshit3(time,increment, size)
   local st = r8w2 + math.sin(math.sin(time)) * (r8w2-128)
   local ct = r8h2 + (math.cos(time)*math.sin(time)) * (r8h2-128)
   
@@ -241,8 +239,9 @@ function lameshit3(time,increment)
     end
   end
   
-  quad:setViewport(st,ct,128,128)
-  love.graphics.drawq(bier,quad,ls3x,ls3y)
+	local off = 128-size;
+  quad:setViewport(st,ct,size,size)
+  love.graphics.drawq(bier,quad,ls3x+off,ls3y+off)
 end
 
 function lameshit4(time)
@@ -407,21 +406,6 @@ feedback_parameters = {
 	 blowup = .0008582,
 	 t_rotate = .000005206,
   },
-  {
-		dist_scale = 0.1,
-		dist_add = .0,
-		sat_to_hue = .1,
-		val_to_hue = .0,
-		sat_to_sat = .1;
-		val_to_sat = .1;
-		sat_to_val = -.001;
-		hue_to_val = .0;
-		blowup = 0.02,
-		t_rotate = 1.,
-		c_rotate = -.001,
-		feed_param = 1.,
-		orig_param = 0.1,
-	},
 	{ -- In-place noise islands
 		dist_scale = .000528,
 		dist_add	= -0.000551,
@@ -438,21 +422,40 @@ feedback_parameters = {
 		blowup = 0.002,
 		t_rotate = 10.,
 	},
+  {
+		dist_scale = 0.1,
+		dist_add = .0,
+		sat_to_hue = .1,
+		val_to_hue = .0,
+		sat_to_sat = .1;
+		val_to_sat = .1;
+		sat_to_val = -.001;
+		hue_to_val = .0;
+		blowup = 0.02,
+		t_rotate = 1.,
+		c_rotate = -.001,
+		feed_param = 1.,
+		orig_param = 0.1,
+	},
 	{ -- Passthrough                  -- 14
 		orig_param = 1.;
 		feed_param = 0.7;
+		blowup = 0.,
 	},
 	{ -- Passthrough                  -- 15
 		orig_param = 0;
 		feed_param = 0.9;
+		blowup = 0.,
 	},
 	{ -- Passthrough                  -- 16
 		orig_param = 0;
 		feed_param = 0.;
+		blowup = 0.,
 	},
 	{ -- Passthrough                  -- 17
 		orig_param = 0;
 		feed_param = 0.;
+		blowup = 0.,
 	},
 
 }
@@ -496,7 +499,7 @@ function love.draw()
 	love.graphics.setCanvas(bgcanvas);
 	love.graphics.setColor(255,255,255,30);
 
-	if(textparam.lameshit==1) then
+	if(textparam.lameshit==1) or (textparam.lameshit==8) or (textparam.lameshit==10) or (textparam.lameshit==11) then
 		lameshit1(time)
 	end
 
@@ -519,8 +522,17 @@ function love.draw()
 	love.graphics.setColor(textparam.r, textparam.g, textparam.b, 255);
 	love.graphics.print(textparam.text, textparam.x, textparam.y);
 
-	if(textparam.lameshit==3) then
-		lameshit3(time,true)
+	if(textparam.lameshit==3) or (textparam.lameshit == 6) then
+		lameshit3(time,true, 128)
+	end
+  if (textparam.lameshit == 9) or (textparam.lameshit==10)  then
+		lameshit3(time,true, 96)
+	end
+	if (textparam.lameshit == 12) then
+		lameshit3(time,true, 16)
+	end
+	if(textparam.lameshit == 6) or (textparam.lameshit == 11) then
+		lameshit5(time)
 	end
 
 	-- Draw the result on the screen using the postproc shader
@@ -544,13 +556,18 @@ function love.draw()
 
   local strstr = love.timer.getFPS() .. " - " .. time
 --  lameshit3(time,true)
-  lameshit4(time)
+	if(textparam.lameshit == 4) or (textparam.lameshit == 5) or (textparam.lameshit == 9) or (textparam.lameshit == 10) then
+		lameshit4(time)
+	end
 --  lameshit5(time)
 --	love.graphics.setFont(f);
 --	love.graphics.print(strstr, 
 --			200+200*math.sin(love.timer.getMicroTime()-time_0), 
 --			150+150*math.cos(love.timer.getMicroTime()-time_0))
 
+	if(textparam.lameshit == 8) then
+		lameshit5(time)
+	end
 	if(textparam.lameshit == 2) then
 		lameshit2(time - 13*6)
 	end
