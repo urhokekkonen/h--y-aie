@@ -4,8 +4,10 @@ function love.load()
 	love.graphics.setFont(f)
 
 	feedback_file = io.open("feedback.glsl");
-	shader = love.graphics.newPixelEffect(feedback_file:read("*a"));
+	feedback_shader = love.graphics.newPixelEffect(feedback_file:read("*a"));
 
+	postproc_file = io.open("postproc.glsl");
+	postproc_shader = love.graphics.newPixelEffect(postproc_file:read("*a"));
 
 	bgcanvas = love.graphics.newCanvas();
 	feedback_canvas = love.graphics.newCanvas();
@@ -24,6 +26,8 @@ end
 function love.draw()
 	love.graphics.setPixelEffect()
 	bgcanvas:clear();
+	time = love.timer.getMicroTime()-time_0;
+	resolution = {bgcanvas:getWidth(), bgcanvas:getHeight()};
 	
 	-- Draw input stuff
 	love.graphics.setCanvas(bgcanvas);
@@ -35,15 +39,16 @@ function love.draw()
 	-- Draw the feedback effect
 	love.graphics.setColor(255,255,255,255);
 	love.graphics.setCanvas(feedback_canvas);
-	love.graphics.setPixelEffect(shader);
-	shader:send("feedback", feedback_canvas);
-	shader:send("t",love.timer.getMicroTime()-time_0);
+	love.graphics.setPixelEffect(feedback_shader);
+	feedback_shader:send("feedback", feedback_canvas);
+	feedback_shader:send("t",time);
+	feedback_shader:send("r",resolution);
 	love.graphics.draw(bgcanvas,0,0,0,1,1);
 	
-
-	-- Use the shader on it
+	-- Draw the result on the screen using the postproc shader
 	love.graphics.setCanvas();
-	love.graphics.setPixelEffect();
+	love.graphics.setPixelEffect(postproc_shader);
+	postproc_shader:send("t", time);
 	love.graphics.draw(feedback_canvas,0,0,0,1,1);
 	
 end
