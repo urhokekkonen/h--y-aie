@@ -12,8 +12,10 @@ extern float dist_scale = 1.;
 extern float dist_add = .1;
 extern float sat_to_hue = .1;
 extern float val_to_hue = .1;
-extern float blowup = 0.002;
+extern float blowup = 0.00;
 extern float t_rotate = 10.;
+extern float feed_param = 1.;
+extern float orig_param = 1.;
 
 vec4 rgbToHsv( vec4 rgba ) {
 	vec4 return_value; 
@@ -92,5 +94,5 @@ vec4 effect(vec4 color, Image texture, vec2 texture_coords, vec2 pixel_coords) {
 	b.a = 1;
 	b = hsvToRgb(b);
 
-	return c+b;
+	return orig_param*c+feed_param*b;
 }
