@@ -3,6 +3,7 @@ function love.load()
 	local f = love.graphics.newFont(30)
 	love.graphics.setFont(f)
 
+	-- Initialize shaders
 	feedback_file = io.open("feedback.glsl");
 	feedback_shader = love.graphics.newPixelEffect(feedback_file:read("*a"));
 
@@ -12,6 +13,12 @@ function love.load()
 	bgcanvas = love.graphics.newCanvas();
 	feedback_canvas = love.graphics.newCanvas();
 	feedback_canvas2 = love.graphics.newCanvas();
+
+	-- Load audio
+	music = love.audio.newSource("music.ogg","stream");
+	music:play();
+
+	-- Set reference time
 	time_0 = love.timer.getMicroTime();
 end
 
