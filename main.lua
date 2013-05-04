@@ -1,14 +1,15 @@
 -- Initialization
 function love.load()
+
+	-- Set graphics mode
+
 	local f = love.graphics.newFont(30)
 	love.graphics.setFont(f)
 
 	-- Initialize shaders
-	feedback_file = io.open("feedback.glsl");
-	feedback_shader = love.graphics.newPixelEffect(feedback_file:read("*a"));
+	feedback_shader = love.graphics.newPixelEffect(love.filesystem.read("feedback.glsl"));
 
-	postproc_file = io.open("postproc.glsl");
-	postproc_shader = love.graphics.newPixelEffect(postproc_file:read("*a"));
+	postproc_shader = love.graphics.newPixelEffect(love.filesystem.read("postproc.glsl"));
 
 	bgcanvas = love.graphics.newCanvas();
 	feedback_canvas = love.graphics.newCanvas();
