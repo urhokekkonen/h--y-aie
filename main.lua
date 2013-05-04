@@ -7,8 +7,10 @@ function love.load()
 	-- Hide the mouse cursor
 --	love.mouse.setVisible(false);
 
-	local f = love.graphics.newFont(30)
+	f = love.graphics.newFont("EPIDEMIA.otf", 50)
+	titlefont = love.graphics.newFont("EPIDEMIA.otf", 350)
 	love.graphics.setFont(f)
+	--love.graphics.setNewFont("EPIDEMIA.otf", 50)
   
   bier = love.graphics.newImage( 'Rochfort8.JPG' )
   r8w = 3648
@@ -26,7 +28,7 @@ function love.load()
 	-- Initialize shaders
 	feedback_shader = love.graphics.newPixelEffect(love.filesystem.read("feedback.glsl"));
 
---	postproc_shader = love.graphics.newPixelEffect(love.filesystem.read("postproc.glsl"));
+	postproc_shader = love.graphics.newPixelEffect(love.filesystem.read("postproc.glsl"));
 
   bgcanvas = love.graphics.newCanvas();
 	feedback_canvas = love.graphics.newCanvas();
@@ -34,10 +36,137 @@ function love.load()
 
 	-- Load audio
 	music = love.audio.newSource("music.ogg","stream");
-	--music:play();
+	music:play();
 
 	-- Set reference time
 	time_0 = love.timer.getMicroTime();
+
+	-- Font and scrolltable
+	font_table = {
+		{
+			x = 600,
+			y = 400,
+			text = "",
+			font = f,
+			r=255, g=255, b=255,
+			lameshit = 1
+		},
+		{
+			x = 600,
+			y = 400,
+			text = "Demoklubi Breakfast Club",
+			font = f,
+			r=255, g=255, b=255,
+			lameshit = 1
+		},
+		{
+			x = 600,
+			y = 450,
+			text = "Presents",
+			font = f,
+			r=255, g=255, b=255,
+			lameshit = 1
+		},
+		{
+			x = 600,
+			y = 500,
+			text = "for the wedding democompo",
+			font = f,
+			r=255, g=255, b=255,
+			lameshit = 3
+		},
+		{
+			x = 600,
+			y = 550,
+			text = "",
+			font = f,
+			r=0, g=0, b=0,
+			lameshit = 1
+		},
+		{
+			x = 400,
+			y = 350,
+			text = "",
+			font = f,
+			r=0, g=0, b=0,
+			lameshit = 1
+		},
+		{
+			x = 400,
+			y = 300,
+			text = "Hääyöaie",
+			font = titlefont,
+			r=127, g=127, b=127,
+			lameshit = 1
+		},
+		{
+			x = 400,
+			y = 350,
+			text = "",
+			font = f,
+			r=0, g=0, b=0,
+			lameshit = 1
+		},
+		{
+			x = 400,
+			y = 350,
+			text = "",
+			font = f,
+			r=0, g=0, b=0,
+			lameshit = 3
+		},
+		{
+			x = 400,
+			y = 350,
+			text = "",
+			font = f,
+			r=0, g=0, b=0,
+			lameshit = 1
+		},
+		{
+			x = 600,
+			y = 550,
+			text = "Code: truck, urs",
+			font = f,
+			r=192, g=129, b=192,
+			lameshit = 1
+		},
+		{
+			x = 600,
+			y = 600,
+			text = "Music: urs",
+			font = f,
+			r=100, g=100, b=100,
+			lameshit = 1
+		},
+		{
+			x = 600,
+			y = 600,
+			text = "",
+			font = f,
+			r=0, g=0, b=0,
+			lameshit = 1
+		},
+		{
+			x = 600,
+			y = 600,
+			text = "All the best, satu and waffle",
+			font = f,
+			r=192, g=192, b=192,
+			lameshit = 2
+		},
+		{
+			x = 600,
+			y = 600,
+			text = "",
+			font = f,
+			r=192, g=192, b=192,
+			lameshit = 3
+		},
+
+
+	}
+
 end
 
 current_param = 1;
@@ -48,6 +177,8 @@ function love.keypressed(key, unicode)
 		love.event.quit()
 	elseif key == ' ' then
 		current_param = current_param +1;
+	elseif key == 'b' then
+		current_param = current_param -1;
 	end
 end
 -- Lame Shit! W007.
@@ -130,6 +261,22 @@ end
 
 -- Set of feedback shader parameters
 feedback_parameters = {
+	{
+		dist_scale = 0.1,
+		dist_add = .0,
+		sat_to_hue = .0,
+		val_to_hue = .0,
+		sat_to_sat = .01;
+		val_to_sat = .01;
+		sat_to_val = -.001;
+		hue_to_val = .0;
+		blowup = 0.02,
+		t_rotate = 1.,
+		c_rotate = -.001,
+		feed_param = 1.,
+		orig_param = 0.1,
+	},
+  -- "Demoklubi breakfast club"
 	{ -- solarized stuff
 		dist_scale = 1.,
 		dist_add = .1,
@@ -138,24 +285,36 @@ feedback_parameters = {
 		blowup = 0.002,
 		t_rotate = 10.,
 	},
-	{ -- boring blurriness
-		dist_scale = .5,
-		dist_add = .1,
-		sat_to_hue = 0.05,
-		val_to_hue = .0,
-		blowup = 0.000,
-		t_rotate = 10.,
-		feed_param = .97,
-	},
+ -- "Presents"
+	--{ -- boring blurriness
+	--	dist_scale = .5,
+	--	dist_add = .1,
+	--	sat_to_hue = 0.05,
+	--	val_to_hue = .0,
+	--	blowup = 0.000,
+	--	t_rotate = 10.,
+	--	feed_param = .97,
+	--},
+ -- "For the wedding democompo"
 	{
 		dist_scale = 1.,
 		dist_add = .1,
 		sat_to_hue = .1,
-		val_to_hue = .1,
+		val_to_hue = .5,
 		blowup = 0.002,
 		t_rotate = 1.,
+		c_rotate = -.01,
 		orig_param = 0.,
 		feed_param = 1.001;
+	},
+	{ -- In-place noise islands
+		dist_scale = .000528,
+		dist_add	= -0.000551,
+		sat_to_hue = .00056,
+		val_to_hue = .000056,
+		blowup = .0008582,
+		c_rotate = 0.,
+		t_rotate = .000005206,
 	},
 	{
 		dist_scale = .2,
@@ -210,7 +369,29 @@ feedback_parameters = {
 		feed_param = 1.,
 		orig_param = 0.1,
 	},
-	{
+	{ -- Noisy contract
+		dist_scale = 0.001,
+		dist_add = .1,
+		sat_to_hue = .1,
+		val_to_hue = .2,
+		sat_to_sat = .0;
+		val_to_sat = .2;
+		sat_to_val = .00004;
+		hue_to_val = .0;
+		blowup = -0.002,
+		t_rotate = .0,
+		feed_param = 1.,
+		orig_param = 0.1,
+	},
+	{ -- In-place noise islands
+	 dist_scale = .000528,
+	 dist_add	= -0.000551,
+	 sat_to_hue = .00056,
+	 val_to_hue = .000056,
+	 blowup = .0008582,
+	 t_rotate = .000005206,
+  },
+  {
 		dist_scale = 0.1,
 		dist_add = .0,
 		sat_to_hue = .1,
@@ -233,9 +414,21 @@ feedback_parameters = {
 		blowup = .0008582,
 		t_rotate = .000005206,
 	},
-	{ -- Passthrough
+	{ -- solarized stuff
+		dist_scale = 1.,
+		dist_add = .1,
+		sat_to_hue = .1,
+		val_to_hue = .1,
+		blowup = 0.002,
+		t_rotate = 10.,
+	},
+	{ -- Passthrough                  -- 14
 		orig_param = 1.;
-		feed_param =0.;
+		feed_param = 0.7;
+	},
+	{ -- Passthrough                  -- 15
+		orig_param = 0;
+		feed_param = 0.9;
 	},
 
 }
@@ -248,6 +441,15 @@ postproc_parameters = {
 		noise_amount = .7,
 		saturation_value = .3,
 		gamma = .5,
+		gamma_pulse = 0.;
+	},
+	pulsed = {
+		vignette_offset = 1.5*.5,
+    vignette_exponent = 6.*.5,
+		noise_amount = .7,
+		saturation_value = .7,
+		gamma = .5,
+		gamma_pulse = 1.;
 	},
 }
 
@@ -257,13 +459,22 @@ function love.draw()
 	bgcanvas:clear();
   
 	local time = love.timer.getMicroTime()-time_0;
-	
+
+	local current_param = math.floor(time / 6)+1;
+	print ("Current param = " .. current_param);
+	local textparam = font_table[current_param];
+
+	if current_param == 17 then
+		love.event.quit()
+	end
+
 	-- Draw input stuff
 	love.graphics.setCanvas(bgcanvas);
 	love.graphics.setColor(255,255,255,30);
 
-  lameshit1(time)
---  lameshit3(time,true)
+	if(textparam.lameshit==1) then
+		lameshit1(time)
+	end
 
 	-- Draw the feedback effect
 	love.graphics.setColor(255,255,255,255);
@@ -277,20 +488,47 @@ function love.draw()
 	end
 	love.graphics.draw(bgcanvas,0,0,0,1,1);
 	
+
+	-- Render the font-table thingy into the intermediate buffer
+	love.graphics.setPixelEffect();
+	love.graphics.setFont(textparam.font);
+	love.graphics.setColor(textparam.r, textparam.g, textparam.b, 255);
+	love.graphics.print(textparam.text, textparam.x, textparam.y);
+
+	if(textparam.lameshit==3) then
+		lameshit3(time,true)
+	end
+
 	-- Draw the result on the screen using the postproc shader
 	love.graphics.setCanvas();
-	--love.graphics.setPixelEffect(postproc_shader);
-	love.graphics.setPixelEffect();
-	--postproc_shader:send("t", time);
-	--for name,value in pairs(postproc_parameters["default"]) do
-	--	postproc_shader:send(name, value)
-	--end
-  
+	love.graphics.setPixelEffect(postproc_shader);
+	--love.graphics.setPixelEffect();
+	postproc_shader:send("t", time);
+	if(current_param < 3) or (current_param > 15) then
+		postproc = "default"
+	else
+		postproc = "pulsed"
+	end
+	for name,value in pairs(postproc_parameters[postproc]) do
+		postproc_shader:send(name, value)
+	end
+
   love.graphics.draw(feedback_canvas,0,0,0,1,1);
 	
+	-- Render font there
+	love.graphics.setPixelEffect();
+
   local strstr = love.timer.getFPS() .. " - " .. time
-      
 --  lameshit3(time,true)
   lameshit4(time)
 --  lameshit5(time)
+--	love.graphics.setFont(f);
+--	love.graphics.print(strstr, 
+--			200+200*math.sin(love.timer.getMicroTime()-time_0), 
+--			150+150*math.cos(love.timer.getMicroTime()-time_0))
+
+	if(textparam.lameshit == 2) then
+		lameshit2(time - 13*6)
+	end
+  
 end

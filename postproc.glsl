@@ -8,6 +8,7 @@ extern float vignette_exponent = 6.*.5;
 extern float noise_amount = .7;
 extern float saturation_value = .3;
 extern float gamma = .5;
+extern float gamma_pulse = .1;
 
 int LFSR_Rand_Gen(in int n) {
    n = (n << 13) ^ n;
@@ -40,10 +41,10 @@ vec4 effect(vec4 color, Image texture, vec2 texture_coords, vec2 pixel_coords) {
   vec2 pos = texture_coords;
   vec4 col = texture2D(texture,pos);
 
-  col = vignette(pos,vignette_offset, vignette_exponent)*col + .06*noise_amount*noise_amount*noise3f(7129.5*vec3(pos,t));
+  col = vignette(pos,vignette_offset, vignette_exponent)*col;
   col = saturation(col, 5*pow(saturation_value,1.7));
 
-  o0 = pow(col, vec4(3-3.9*gamma));
+  o0 = pow(col, vec4(3-3.9*gamma-gamma_pulse*exp(-fract(t/6.*8.+.5)))) + .06*noise_amount*noise_amount*noise3f(7129.5*vec3(pos,t));
 
 	return o0;
 }
