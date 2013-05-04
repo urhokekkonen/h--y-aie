@@ -5,7 +5,7 @@ function love.load()
   wantedheight = 720
 	love.graphics.setMode(wantedwidth,wantedheight, false,0);
 	-- Hide the mouse cursor
-	love.mouse.setVisible(false);
+--	love.mouse.setVisible(false);
 
 	local f = love.graphics.newFont(30)
 	love.graphics.setFont(f)
@@ -216,9 +216,12 @@ function love.draw()
 	--for name,value in pairs(postproc_parameters["default"]) do
 	--	postproc_shader:send(name, value)
 	--end
-	love.graphics.draw(feedback_canvas,0,0,0,1,1);
+  
+  love.graphics.draw(feedback_canvas,0,0,0,1,1);
 	
-	love.graphics.print("Hello World", 
+  local strstr = love.timer.getFPS() .. " - " .. time
+  
+	love.graphics.print(strstr, 
 			200+200*math.sin(love.timer.getMicroTime()-time_0), 
 			150+150*math.cos(love.timer.getMicroTime()-time_0))
   
