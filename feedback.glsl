@@ -12,8 +12,13 @@ extern float dist_scale = 1.;
 extern float dist_add = .1;
 extern float sat_to_hue = .1;
 extern float val_to_hue = .1;
+extern float sat_to_sat = 0.;
+extern float val_to_sat = 0.;
+extern float sat_to_val = 0.;
+extern float hue_to_val = 0.;
 extern float blowup = 0.00;
 extern float t_rotate = 10.;
+extern float c_rotate = 0.;
 extern float feed_param = 1.;
 extern float orig_param = 1.;
 
@@ -75,6 +80,10 @@ vec4 effect(vec4 color, Image texture, vec2 texture_coords, vec2 pixel_coords) {
 	vec2 coords = texture_coords;
 	vec4 c= texture2D(texture,texture_coords);
 
+	coords=coords-.5;
+	coords.xy = cos(c_rotate)*coords.xy + sin(c_rotate)*vec2(-1,1)*coords.yx;
+	coords=coords+.5;
+
 	// Look up value
 	vec4 a=texture2D(feedback,coords);
 
@@ -91,6 +100,8 @@ vec4 effect(vec4 color, Image texture, vec2 texture_coords, vec2 pixel_coords) {
 	// Also hsv
 	b = rgbToHsv(b);
 	b.x += sat_to_hue*a.y - val_to_hue*a.z; // Rotate color
+	b.y += sat_to_sat*a.y - val_to_sat*a.z;
+	b.z += sat_to_val*a.y - hue_to_val*a.x;
 	b.a = 1;
 	b = hsvToRgb(b);
 

@@ -62,7 +62,7 @@ end
 
 -- Set of feedback shader parameters
 feedback_parameters = {
-	{
+	{ -- solarized stuff
 		dist_scale = 1.,
 		dist_add = .1,
 		sat_to_hue = .1,
@@ -70,7 +70,7 @@ feedback_parameters = {
 		blowup = 0.002,
 		t_rotate = 10.,
 	},
-	{
+	{ -- boring blurriness
 		dist_scale = .5,
 		dist_add = .1,
 		sat_to_hue = 0.05,
@@ -99,15 +99,75 @@ feedback_parameters = {
 		feed_param = 1.,
 		orig_param = 1.,
 	},
-	{
-		dist_scale = .1,
+	{ -- Burning clouds. Phew
+		dist_scale = 10.,
 		dist_add = .1,
-		sat_to_hue = .1,
-		val_to_hue = .1,
-		blowup = 0.006,
+		sat_to_hue = .4,
+		val_to_hue = .4,
+		sat_to_sat = .1;
+		val_to_sat = .1;
+		sat_to_val = .1;
+		hue_to_val = 0;
+		blowup = 0.01,
 		t_rotate = .0,
 		feed_param = 1.,
 		orig_param = 0.1,
+	},
+	{ -- Noisy contract
+		dist_scale = 0.1,
+		dist_add = .1,
+		sat_to_hue = .1,
+		val_to_hue = .2,
+		sat_to_sat = .0;
+		val_to_sat = .2;
+		sat_to_val = .00004;
+		hue_to_val = .0;
+		blowup = -0.002,
+		t_rotate = .0,
+		feed_param = 1.,
+		orig_param = 0.1,
+	},
+	{ -- Color explosion
+		dist_scale = 0.01,
+		dist_add = .0,
+		sat_to_hue = .1,
+		val_to_hue = .0,
+		sat_to_sat = .1;
+		val_to_sat = .0;
+		sat_to_val = .0;
+		hue_to_val = .0;
+		blowup = 0.001,
+		t_rotate = 1.,
+		c_rotate = -.001,
+		feed_param = 1.,
+		orig_param = 0.1,
+	},
+	{
+		dist_scale = 0.1,
+		dist_add = .0,
+		sat_to_hue = .1,
+		val_to_hue = .0,
+		sat_to_sat = .1;
+		val_to_sat = .1;
+		sat_to_val = -.001;
+		hue_to_val = .0;
+		blowup = 0.02,
+		t_rotate = 1.,
+		c_rotate = -.001,
+		feed_param = 1.,
+		orig_param = 0.1,
+	},
+	{ -- In-place noise islands
+		dist_scale = .000528,
+		dist_add	= -0.000551,
+		sat_to_hue = .00056,
+		val_to_hue = .000056,
+		blowup = .0008582,
+		t_rotate = .000005206,
+	},
+	{ -- Passthrough
+		orig_param = 1.;
+		feed_param =0.;
 	},
 
 }
