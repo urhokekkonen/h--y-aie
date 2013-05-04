@@ -35,10 +35,14 @@ function love.load()
 	time_0 = love.timer.getMicroTime();
 end
 
--- Exit on esc.
+current_param = 1;
+
+-- Exit on esc, choose new param on space
 function love.keypressed(key, unicode)
 	if key == 'escape' then
 		love.event.quit()
+	elseif key == ' ' then
+		current_param = current_param +1;
 	end
 end
 -- Lame Shit! W007.
@@ -58,14 +62,54 @@ end
 
 -- Set of feedback shader parameters
 feedback_parameters = {
-	colorful = {
+	{
 		dist_scale = 1.,
 		dist_add = .1,
 		sat_to_hue = .1,
 		val_to_hue = .1,
 		blowup = 0.002,
 		t_rotate = 10.,
-	}
+	},
+	{
+		dist_scale = .5,
+		dist_add = .1,
+		sat_to_hue = 0.05,
+		val_to_hue = .0,
+		blowup = 0.000,
+		t_rotate = 10.,
+		feed_param = .97,
+	},
+	{
+		dist_scale = 1.,
+		dist_add = .1,
+		sat_to_hue = .1,
+		val_to_hue = .1,
+		blowup = 0.002,
+		t_rotate = 1.,
+		orig_param = 0.,
+		feed_param = 1.001;
+	},
+	{
+		dist_scale = .2,
+		dist_add = .1,
+		sat_to_hue = .2,
+		val_to_hue = .2,
+		blowup = -0.004,
+		t_rotate = -2.,
+		feed_param = 1.,
+		orig_param = 1.,
+	},
+	{
+		dist_scale = .1,
+		dist_add = .1,
+		sat_to_hue = .1,
+		val_to_hue = .1,
+		blowup = 0.006,
+		t_rotate = .0,
+		feed_param = 1.,
+		orig_param = 0.1,
+	},
+
 }
 
 -- Set of postproc shader parameters
@@ -99,7 +143,7 @@ function love.draw()
 	feedback_shader:send("feedback", feedback_canvas);
 	feedback_shader:send("t",time);
 	feedback_shader:send("r",resolution);
-	for name,value in pairs(feedback_parameters["colorful"]) do
+	for name,value in pairs(feedback_parameters[current_param]) do
 		feedback_shader:send(name, value)
 	end
 	love.graphics.draw(bgcanvas,0,0,0,1,1);
