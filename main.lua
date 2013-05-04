@@ -290,7 +290,7 @@ function love.draw()
 	
   local strstr = love.timer.getFPS() .. " - " .. time
       
-  lameshit3(time,true)
+--  lameshit3(time,true)
   lameshit4(time)
-  lameshit5(time)
+--  lameshit5(time)
 end
