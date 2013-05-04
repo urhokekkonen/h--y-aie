@@ -36,20 +36,20 @@ function love.load()
 
 	-- Load audio
 	music = love.audio.newSource("music.ogg","stream");
-	--music:play();
+	music:play();
 
 	-- Set reference time
 	time_0 = love.timer.getMicroTime();
 
 	-- Font and scrolltable
 	font_table = {
-
 		{
 			x = 600,
 			y = 400,
 			text = "",
 			font = f,
 			r=255, g=255, b=255,
+			lameshit = 1
 		},
 		{
 			x = 600,
@@ -57,6 +57,7 @@ function love.load()
 			text = "Demoklubi Breakfast Club",
 			font = f,
 			r=255, g=255, b=255,
+			lameshit = 1
 		},
 		{
 			x = 600,
@@ -64,6 +65,7 @@ function love.load()
 			text = "Presents",
 			font = f,
 			r=255, g=255, b=255,
+			lameshit = 1
 		},
 		{
 			x = 600,
@@ -71,6 +73,7 @@ function love.load()
 			text = "for the wedding democompo",
 			font = f,
 			r=255, g=255, b=255,
+			lameshit = 3
 		},
 		{
 			x = 600,
@@ -78,6 +81,7 @@ function love.load()
 			text = "",
 			font = f,
 			r=0, g=0, b=0,
+			lameshit = 1
 		},
 		{
 			x = 400,
@@ -85,6 +89,7 @@ function love.load()
 			text = "",
 			font = f,
 			r=0, g=0, b=0,
+			lameshit = 1
 		},
 		{
 			x = 400,
@@ -92,6 +97,7 @@ function love.load()
 			text = "Hääyöaie",
 			font = titlefont,
 			r=127, g=127, b=127,
+			lameshit = 1
 		},
 		{
 			x = 400,
@@ -99,6 +105,7 @@ function love.load()
 			text = "",
 			font = f,
 			r=0, g=0, b=0,
+			lameshit = 1
 		},
 
 
@@ -182,6 +189,7 @@ feedback_parameters = {
 		feed_param = 1.,
 		orig_param = 0.1,
 	},
+  -- "Demoklubi breakfast club"
 	{ -- solarized stuff
 		dist_scale = 1.,
 		dist_add = .1,
@@ -190,6 +198,7 @@ feedback_parameters = {
 		blowup = 0.002,
 		t_rotate = 10.,
 	},
+ -- "Presents"
 	--{ -- boring blurriness
 	--	dist_scale = .5,
 	--	dist_add = .1,
@@ -199,13 +208,15 @@ feedback_parameters = {
 	--	t_rotate = 10.,
 	--	feed_param = .97,
 	--},
+ -- "For the wedding democompo"
 	{
 		dist_scale = 1.,
 		dist_add = .1,
 		sat_to_hue = .1,
-		val_to_hue = .1,
+		val_to_hue = .5,
 		blowup = 0.002,
 		t_rotate = 1.,
+		c_rotate = -.01,
 		orig_param = 0.,
 		feed_param = 1.001;
 	},
@@ -215,6 +226,7 @@ feedback_parameters = {
 		sat_to_hue = .00056,
 		val_to_hue = .000056,
 		blowup = .0008582,
+		c_rotate = 0.,
 		t_rotate = .000005206,
 	},
 	{
@@ -327,7 +339,8 @@ function love.draw()
   
 	local time = love.timer.getMicroTime()-time_0;
 
-	current_param = math.floor(time / 6)+1;
+	local current_param = math.floor(time / 6)+1;
+	local textparam = font_table[current_param];
 
 	if current_param == 17 then
 		love.event.quit()
@@ -337,7 +350,9 @@ function love.draw()
 	love.graphics.setCanvas(bgcanvas);
 	love.graphics.setColor(255,255,255,30);
 
-  lameshit1(time)
+	if(textparam.lameshit==1) then
+		lameshit1(time)
+	end
 
 	-- Draw the feedback effect
 	love.graphics.setColor(255,255,255,255);
@@ -354,10 +369,13 @@ function love.draw()
 
 	-- Render the font-table thingy into the intermediate buffer
 	love.graphics.setPixelEffect();
-	local textparam = font_table[current_param];
 	love.graphics.setFont(textparam.font);
 	love.graphics.setColor(textparam.r, textparam.g, textparam.b, 255);
 	love.graphics.print(textparam.text, textparam.x, textparam.y);
+
+	if(textparam.lameshit==3) then
+		lameshit3(time,true)
+	end
 
 	-- Draw the result on the screen using the postproc shader
 	love.graphics.setCanvas();
