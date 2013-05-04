@@ -7,8 +7,9 @@ function love.load()
 	-- Hide the mouse cursor
 --	love.mouse.setVisible(false);
 
-	local f = love.graphics.newFont(30)
-	love.graphics.setFont(f)
+	--local f = love.graphics.newFont(30)
+	-- love.graphics.setFont(f)
+	love.graphics.setNewFont("EPIDEMIA.otf", 50)
   
   bier = love.graphics.newImage( 'Rochfort8.JPG' )
   r8w = 3648
@@ -21,7 +22,7 @@ function love.load()
 	-- Initialize shaders
 	feedback_shader = love.graphics.newPixelEffect(love.filesystem.read("feedback.glsl"));
 
---	postproc_shader = love.graphics.newPixelEffect(love.filesystem.read("postproc.glsl"));
+	postproc_shader = love.graphics.newPixelEffect(love.filesystem.read("postproc.glsl"));
 
   bgcanvas = love.graphics.newCanvas();
 	feedback_canvas = love.graphics.newCanvas();
@@ -167,7 +168,7 @@ feedback_parameters = {
 	},
 	{ -- Passthrough
 		orig_param = 1.;
-		feed_param =0.;
+		feed_param = 0.;
 	},
 
 }
@@ -180,6 +181,15 @@ postproc_parameters = {
 		noise_amount = .7,
 		saturation_value = .3,
 		gamma = .5,
+		gamma_pulse = 0.;
+	},
+	pulsed = {
+		vignette_offset = 1.5*.5,
+    vignette_exponent = 6.*.5,
+		noise_amount = .7,
+		saturation_value = .7,
+		gamma = .5,
+		gamma_pulse = 0.;
 	},
 }
 
@@ -210,15 +220,16 @@ function love.draw()
 	
 	-- Draw the result on the screen using the postproc shader
 	love.graphics.setCanvas();
-	--love.graphics.setPixelEffect(postproc_shader);
-	love.graphics.setPixelEffect();
-	--postproc_shader:send("t", time);
-	--for name,value in pairs(postproc_parameters["default"]) do
-	--	postproc_shader:send(name, value)
-	--end
-  
+	love.graphics.setPixelEffect(postproc_shader);
+	--love.graphics.setPixelEffect();
+	postproc_shader:send("t", time);
+	for name,value in pairs(postproc_parameters["pulsed"]) do
+		postproc_shader:send(name, value)
+	end
+
   love.graphics.draw(feedback_canvas,0,0,0,1,1);
 	
+	love.graphics.setPixelEffect();
   local strstr = love.timer.getFPS() .. " - " .. time
   
 	love.graphics.print(strstr, 
