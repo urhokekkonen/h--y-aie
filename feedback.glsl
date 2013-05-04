@@ -79,6 +79,7 @@ float pn(vec3 p) {
 vec4 effect(vec4 color, Image texture, vec2 texture_coords, vec2 pixel_coords) {
 	vec2 coords = texture_coords;
 	vec4 c= texture2D(texture,texture_coords);
+	c.a=1;
 
 	coords=coords-.5;
 	coords.xy = cos(c_rotate)*coords.xy + sin(c_rotate)*vec2(-1,1)*coords.yx;

@@ -7,9 +7,10 @@ function love.load()
 	-- Hide the mouse cursor
 --	love.mouse.setVisible(false);
 
-	--local f = love.graphics.newFont(30)
-	-- love.graphics.setFont(f)
-	love.graphics.setNewFont("EPIDEMIA.otf", 50)
+	f = love.graphics.newFont("EPIDEMIA.otf", 50)
+	titlefont = love.graphics.newFont("EPIDEMIA.otf", 350)
+	love.graphics.setFont(f)
+	--love.graphics.setNewFont("EPIDEMIA.otf", 50)
   
   bier = love.graphics.newImage( 'Rochfort8.JPG' )
   r8w = 3648
@@ -34,6 +35,70 @@ function love.load()
 
 	-- Set reference time
 	time_0 = love.timer.getMicroTime();
+
+	-- Font and scrolltable
+	font_table = {
+
+		{
+			x = 600,
+			y = 400,
+			text = "",
+			font = f,
+			r=255, g=255, b=255,
+		},
+		{
+			x = 600,
+			y = 400,
+			text = "Demoklubi Breakfast Club",
+			font = f,
+			r=255, g=255, b=255,
+		},
+		{
+			x = 600,
+			y = 450,
+			text = "Presents",
+			font = f,
+			r=255, g=255, b=255,
+		},
+		{
+			x = 600,
+			y = 500,
+			text = "for the wedding democompo",
+			font = f,
+			r=255, g=255, b=255,
+		},
+		{
+			x = 600,
+			y = 550,
+			text = "",
+			font = f,
+			r=0, g=0, b=0,
+		},
+		{
+			x = 400,
+			y = 350,
+			text = "",
+			font = f,
+			r=0, g=0, b=0,
+		},
+		{
+			x = 400,
+			y = 300,
+			text = "Hääyöaie",
+			font = titlefont,
+			r=127, g=127, b=127,
+		},
+		{
+			x = 400,
+			y = 350,
+			text = "",
+			font = f,
+			r=0, g=0, b=0,
+		},
+
+
+	}
+
 end
 
 current_param = 1;
@@ -44,6 +109,8 @@ function love.keypressed(key, unicode)
 		love.event.quit()
 	elseif key == ' ' then
 		current_param = current_param +1;
+	elseif key == 'b' then
+		current_param = current_param -1;
 	end
 end
 -- Lame Shit! W007.
@@ -63,6 +130,21 @@ end
 
 -- Set of feedback shader parameters
 feedback_parameters = {
+	{
+		dist_scale = 0.1,
+		dist_add = .0,
+		sat_to_hue = .0,
+		val_to_hue = .0,
+		sat_to_sat = .01;
+		val_to_sat = .01;
+		sat_to_val = -.001;
+		hue_to_val = .0;
+		blowup = 0.02,
+		t_rotate = 1.,
+		c_rotate = -.001,
+		feed_param = 1.,
+		orig_param = 0.1,
+	},
 	{ -- solarized stuff
 		dist_scale = 1.,
 		dist_add = .1,
@@ -71,15 +153,15 @@ feedback_parameters = {
 		blowup = 0.002,
 		t_rotate = 10.,
 	},
-	{ -- boring blurriness
-		dist_scale = .5,
-		dist_add = .1,
-		sat_to_hue = 0.05,
-		val_to_hue = .0,
-		blowup = 0.000,
-		t_rotate = 10.,
-		feed_param = .97,
-	},
+	--{ -- boring blurriness
+	--	dist_scale = .5,
+	--	dist_add = .1,
+	--	sat_to_hue = 0.05,
+	--	val_to_hue = .0,
+	--	blowup = 0.000,
+	--	t_rotate = 10.,
+	--	feed_param = .97,
+	--},
 	{
 		dist_scale = 1.,
 		dist_add = .1,
@@ -89,6 +171,14 @@ feedback_parameters = {
 		t_rotate = 1.,
 		orig_param = 0.,
 		feed_param = 1.001;
+	},
+	{ -- In-place noise islands
+		dist_scale = .000528,
+		dist_add	= -0.000551,
+		sat_to_hue = .00056,
+		val_to_hue = .000056,
+		blowup = .0008582,
+		t_rotate = .000005206,
 	},
 	{
 		dist_scale = .2,
@@ -168,7 +258,7 @@ feedback_parameters = {
 	},
 	{ -- Passthrough
 		orig_param = 1.;
-		feed_param = 0.;
+		feed_param = 0.7;
 	},
 
 }
@@ -189,7 +279,7 @@ postproc_parameters = {
 		noise_amount = .7,
 		saturation_value = .7,
 		gamma = .5,
-		gamma_pulse = 0.;
+		gamma_pulse = 1.;
 	},
 }
 
@@ -199,7 +289,13 @@ function love.draw()
 	bgcanvas:clear();
   
 	local time = love.timer.getMicroTime()-time_0;
-	
+
+	current_param = math.floor(time / 6)+1;
+
+	if current_param == 17 then
+		love.event.quit()
+	end
+
 	-- Draw input stuff
 	love.graphics.setCanvas(bgcanvas);
 	love.graphics.setColor(255,255,255,30);
@@ -218,20 +314,37 @@ function love.draw()
 	end
 	love.graphics.draw(bgcanvas,0,0,0,1,1);
 	
+
+	-- Render the font-table thingy into the intermediate buffer
+	love.graphics.setPixelEffect();
+	local textparam = font_table[current_param];
+	love.graphics.setFont(textparam.font);
+	love.graphics.setColor(textparam.r, textparam.g, textparam.b, 255);
+	love.graphics.print(textparam.text, textparam.x, textparam.y);
+
 	-- Draw the result on the screen using the postproc shader
 	love.graphics.setCanvas();
 	love.graphics.setPixelEffect(postproc_shader);
 	--love.graphics.setPixelEffect();
 	postproc_shader:send("t", time);
-	for name,value in pairs(postproc_parameters["pulsed"]) do
+	if(current_param < 3) then
+		postproc = "default"
+	else
+		postproc = "pulsed"
+	end
+	for name,value in pairs(postproc_parameters[postproc]) do
 		postproc_shader:send(name, value)
 	end
 
   love.graphics.draw(feedback_canvas,0,0,0,1,1);
 	
+	-- Render font there
 	love.graphics.setPixelEffect();
+
   local strstr = love.timer.getFPS() .. " - " .. time
   
+
+	love.graphics.setFont(f);
 	love.graphics.print(strstr, 
 			200+200*math.sin(love.timer.getMicroTime()-time_0), 
 			150+150*math.cos(love.timer.getMicroTime()-time_0))
