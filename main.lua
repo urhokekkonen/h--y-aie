@@ -3,7 +3,7 @@ function love.load()
 	-- Set graphics mode (change false to true for fullscreen)
   wantedwidth = 1280
   wantedheight = 720
-	love.graphics.setMode(wantedwidth,wantedheight, false,0);
+	love.graphics.setMode(wantedwidth,wantedheight, true,0);
 	-- Hide the mouse cursor
 	love.mouse.setVisible(false);
 
@@ -54,7 +54,7 @@ function love.load()
 		{
 			x = 600,
 			y = 400,
-			text = "Breakfast Klub",
+			text = "The Breakfast Klub",
 			font = f,
 			r=255, g=255, b=255,
 			lameshit = 1
@@ -70,7 +70,7 @@ function love.load()
 		{
 			x = 600,
 			y = 500,
-			text = "the winning demo",
+			text = "the wedding demo",
 			font = f,
 			r=255, g=255, b=255,
 			lameshit = 6
@@ -78,7 +78,7 @@ function love.load()
 		{
 			x = 600,
 			y = 500,
-			text = "the wedding demo",
+			text = "the winning demo",
 			font = f,
 			r=255, g=255, b=255,
 			lameshit = 8
@@ -121,14 +121,14 @@ function love.load()
 			text = "",
 			font = f,
 			r=0, g=0, b=0,
-			lameshit = 11
+			lameshit = 10
 		},
 		{ -- 11
 			x = 600,
 			y = 550,
 			text = "Code: Alison, Captain Knäckebröd",
 			font = f,
-			r=20, g=20, b=20,
+			r=0, g=0, b=0,
 			lameshit = 8
 		},
 		{ -- 12
@@ -398,14 +398,22 @@ feedback_parameters = {
 		feed_param = 1.,
 		orig_param = 0.1,
 	},
-	{ -- In-place noise islands
-	 dist_scale = .000528,
-	 dist_add	= -0.000551,
-	 sat_to_hue = .00056,
-	 val_to_hue = .000056,
-	 blowup = .0008582,
-	 t_rotate = .000005206,
-  },
+	--{ -- In-place noise islands  -- 10
+	-- dist_scale = .000528,
+	-- dist_add	= -0.000551,
+	-- sat_to_hue = .00056,
+	-- val_to_hue = .000056,
+	-- blowup = .0008582,
+	-- t_rotate = .000005206,
+  --},
+	{ -- solarized stuff           -- 10
+		dist_scale = 1.,
+		dist_add = .1,
+		sat_to_hue = .1,
+		val_to_hue = .1,
+		blowup = 0.002,
+		t_rotate = 10.,
+	},
 	{ -- In-place noise islands
 		dist_scale = .000528,
 		dist_add	= -0.000551,
